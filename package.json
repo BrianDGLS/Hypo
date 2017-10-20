@@ -1,0 +1,25 @@
+{
+  "name": "hypo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/es6-shim": "^0.31.35",
+    "@types/mocha": "^2.2.43",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "nyc": "^11.2.1",
+    "ts-node": "^3.3.0"
+  }
+}

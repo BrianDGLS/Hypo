@@ -88,4 +88,100 @@ describe("Hypo.Container", () => {
       expect(() => subject.unregisterAll()).not.to.throw();
     });
   });
+
+  describe("#get", () => {
+    it("should return dependency with given name", () => {
+      expect(subject.register(dependency).get(dependency.name)).to.deep.eq(dependency);
+    });
+
+    it("should throw error if no dependency with given name", () => {
+      expect(() => subject.get("notInRegistry")).to.throw();
+    });
+
+    it("should throw error if no name given", () => {
+      expect(() => subject.get("")).to.throw();
+    });
+  });
+
+  describe("#getAll", () => {
+    it("should return all dependencies", () => {
+      mockDependencies().forEach((d: IDependency) => {
+        subject.register(d);
+      });
+
+      expect(subject.getAll()).to.deep.eq(mockDependencies());
+    });
+
+    it("should return empty array if no dependencies", () => {
+      expect(subject.unregisterAll().getAll()).to.deep.eq([]);
+    });
+  });
+
+  describe("#inject", () => {
+    beforeEach(() => {
+      mockDependencies().forEach((d: IDependency) => {
+        subject.register(d);
+      });
+    });
+
+    it("should inject dependency into class", () => {
+      @subject.inject([dependency.name])
+      class C {
+      }
+
+      const cls: any = new C();
+
+      expect(cls[dependency.name]).to.deep.eq(dependency.value);
+    });
+
+    it("should throw error if unknown dependency name", () => {
+      expect(() => {
+        @subject.inject(["notInRegistry"])
+        class C {
+        }
+      }).to.throw();
+    });
+
+    it("should inject multiple dependencies", () => {
+      @subject.inject(mockDependencies().map(({name}) => name))
+      class C {
+      }
+
+      const cls: any = new C();
+
+      mockDependencies().forEach((d: IDependency) => {
+        expect(cls[d.name]).to.deep.eq(d.value);
+      });
+    });
+  });
+
+  describe("#injectAll", () => {
+    beforeEach(() => {
+      mockDependencies().forEach((d: IDependency) => {
+        subject.register(d);
+      });
+    });
+
+    it("should inject all registered dependencies", () => {
+      @subject.injectAll()
+      class C {
+      }
+
+      const cls: any = new C();
+
+      mockDependencies().forEach((d: IDependency) => {
+        expect(cls[d.name]).to.deep.eq(d.value);
+      });
+    });
+
+    it("should not throw error if no dependencies", () => {
+      subject.unregisterAll();
+
+      expect(() => {
+        @subject.injectAll()
+        class C {
+        }
+      }).to.not.throw();
+    });
+  });
 });

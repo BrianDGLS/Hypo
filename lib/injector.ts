@@ -1,14 +1,17 @@
-import { Dependency } from './dependency'
+import {IDependency} from "./dependency";
 
-export class Injector {
-  public constructor () {}
+export interface IInjector {
+  inject(cls: any, dependencies: IDependency[]): void;
+}
 
-  public inject (cls: any, dependencies: Dependency[]) {
+export class Injector implements IInjector {
+  public inject(cls: any, dependencies: IDependency[]) {
     dependencies.map(({name, value}) => {
-      cls[name] = value
-      cls.prototype[name] = value
-    })
+      cls[name] = value;
+      cls.prototype[name] = value;
+    });
 
-    return class extends cls {}
+    return class extends cls {
+    };
   }
 }

@@ -1,5 +1,4 @@
-export type Dependency =
-  {
-    name: string
-    value: any
+export interface IDependency {
+    name: string;
+    value: any;
   }

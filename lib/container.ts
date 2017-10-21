@@ -1,23 +1,60 @@
-import { Registry } from './registry'
-import { Injector } from './injector'
-import { Dependency } from './dependency'
+import {IDependency} from "./dependency";
+import {IInjector, Injector} from "./injector";
+import {IRegistry, Registry} from "./registry";
 
-export class Container {
-  public constructor (private _registry: Registry = new Registry(),
-                      private _injector: Injector = new Injector()) {}
+export interface IContainer<T> {
+  register(dependency: IDependency): T;
 
-  public register (dependency: Dependency): Container {
-    this._registry.add(dependency)
-    return this
+  unregister(name: string): T;
+
+  unregisterAll(): T;
+
+  get(name: string): IDependency;
+
+  getAll(): IDependency[];
+
+  inject(dependencyNames: string[]): any;
+
+  injectAll(): any;
+}
+
+export class Container implements IContainer<Container> {
+  public constructor(private registry: IRegistry = new Registry(),
+                     private injector: IInjector = new Injector()) {
   }
 
-  public get (name: string): Dependency {
-    return this._registry.get(name)
+  public register(dependency: IDependency): Container {
+    this.registry.add(dependency);
+    return this;
   }
 
-  public inject (dependencyNames: string[]): any {
-    return <T extends { new(...args: any[]): {} }> (cls: T) => {
-      this._injector.inject(cls, dependencyNames.map(this.get.bind(this)))
-    }
+  public unregister(name: string): Container {
+    this.registry.remove(name);
+    return this;
+  }
+
+  public unregisterAll(): Container {
+    this.registry.removeAll();
+    return this;
+  }
+
+  public get(name: string): IDependency {
+    return this.registry.get(name);
+  }
+
+  public getAll(): IDependency[] {
+    return this.registry.getAll();
+  }
+
+  public inject(dependencyNames: string[]): any {
+    return <T extends { new(...args: any[]): {} }>(cls: T) => {
+      this.injector.inject(cls, dependencyNames.map(this.get.bind(this)));
+    };
+  }
+
+  public injectAll(): any {
+    return <T extends { new(...args: any[]): {} }>(cls: T) => {
+      this.injector.inject(cls, this.getAll());
+    };
   }
 }

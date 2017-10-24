@@ -2,6 +2,6 @@
 .nyc_output
 node_modules
 *.logs
-lib/*.js
-test/*.js
-examples/*.js
+lib/**/*.js
+test/**/*.js
+examples/**/*.js

@@ -4,3 +4,4 @@ node_modules
 *.logs
 lib/*.js
 test/*.js
+examples/*.js

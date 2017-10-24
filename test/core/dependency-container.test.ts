@@ -1,6 +1,6 @@
 import {expect} from "chai";
-import {Container} from "../lib/container";
-import {IDependency} from "../lib/dependency";
+import {Container} from "../../lib/core/container";
+import {IDependency} from "../../lib/core/dependency";
 
 const mockDependencies = (): IDependency[] => {
   return [
@@ -12,7 +12,7 @@ const mockDependencies = (): IDependency[] => {
   ];
 };
 
-describe("Hypo.Container", () => {
+describe("Core.Container", () => {
   let subject: Container;
   let dependency: IDependency;
 
@@ -23,35 +23,39 @@ describe("Hypo.Container", () => {
 
   describe("#register", () => {
     it("should add dependency to internal registry", () => {
-      expect(subject.register(dependency).get(dependency.name)).to.deep.eq(dependency);
+      expect(subject
+        .register(dependency.name, dependency.value)
+        .get(dependency.name)).to.deep.eq(dependency.value);
     });
 
     it("should throw error if dependency name in registry", () => {
-      expect(() => subject.register(dependency).register(dependency)).to.throw();
+      expect(() => subject
+        .register(dependency.name, dependency.value)
+        .register(dependency.name, dependency.value)).to.throw();
     });
 
     it("should be a chainable function", () => {
       const dependencies = mockDependencies();
 
       subject
-        .register(dependencies[0])
-        .register(dependencies[1])
-        .register(dependencies[2])
-        .register(dependencies[3])
-        .register(dependencies[4]);
+        .register(dependencies[0].name, dependencies[0].value)
+        .register(dependencies[1].name, dependencies[1].value)
+        .register(dependencies[2].name, dependencies[2].value)
+        .register(dependencies[3].name, dependencies[3].value)
+        .register(dependencies[4].name, dependencies[4].value);
 
-      expect(subject.get(dependencies[0].name)).to.deep.eq(dependencies[0]);
-      expect(subject.get(dependencies[1].name)).to.deep.eq(dependencies[1]);
-      expect(subject.get(dependencies[2].name)).to.deep.eq(dependencies[2]);
-      expect(subject.get(dependencies[3].name)).to.deep.eq(dependencies[3]);
-      expect(subject.get(dependencies[4].name)).to.deep.eq(dependencies[4]);
+      expect(subject.get(dependencies[0].name)).to.deep.eq(dependencies[0].value);
+      expect(subject.get(dependencies[1].name)).to.deep.eq(dependencies[1].value);
+      expect(subject.get(dependencies[2].name)).to.deep.eq(dependencies[2].value);
+      expect(subject.get(dependencies[3].name)).to.deep.eq(dependencies[3].value);
+      expect(subject.get(dependencies[4].name)).to.deep.eq(dependencies[4].value);
     });
   });
 
   describe("#unregister", () => {
     it("should unregister an existing dependency", () => {
       subject
-        .register(dependency)
+        .register(dependency.name, dependency.value)
         .unregister(dependency.name);
 
       expect(() => subject.get(dependency.name)).to.throw();
@@ -65,8 +69,8 @@ describe("Hypo.Container", () => {
       const dependencies = mockDependencies();
 
       subject
-        .register(dependencies[0])
-        .register(dependencies[1])
+        .register(dependencies[0].name, dependencies[0].value)
+        .register(dependencies[1].name, dependencies[1].value)
         .unregister(dependencies[0].name)
         .unregister(dependencies[1].name);
 
@@ -78,7 +82,7 @@ describe("Hypo.Container", () => {
   describe("#unregisterAll", () => {
     it("should remove all dependencies in registry", () => {
       mockDependencies().forEach((d: IDependency) => {
-        subject.register(d);
+        subject.register(d.name, d.value);
       });
 
       expect(subject.unregisterAll().getAll()).to.deep.eq([]);
@@ -91,7 +95,10 @@ describe("Hypo.Container", () => {
 
   describe("#get", () => {
     it("should return dependency with given name", () => {
-      expect(subject.register(dependency).get(dependency.name)).to.deep.eq(dependency);
+      expect(subject
+        .register(dependency.name, dependency.value)
+        .get(dependency.name))
+        .to.deep.eq(dependency.value);
     });
 
     it("should throw error if no dependency with given name", () => {
@@ -106,7 +113,7 @@ describe("Hypo.Container", () => {
   describe("#getAll", () => {
     it("should return all dependencies", () => {
       mockDependencies().forEach((d: IDependency) => {
-        subject.register(d);
+        subject.register(d.name, d.value);
       });
 
       expect(subject.getAll()).to.deep.eq(mockDependencies());
@@ -120,7 +127,7 @@ describe("Hypo.Container", () => {
   describe("#inject", () => {
     beforeEach(() => {
       mockDependencies().forEach((d: IDependency) => {
-        subject.register(d);
+        subject.register(d.name, d.value);
       });
     });
 
@@ -158,7 +165,7 @@ describe("Hypo.Container", () => {
   describe("#injectAll", () => {
     beforeEach(() => {
       mockDependencies().forEach((d: IDependency) => {
-        subject.register(d);
+        subject.register(d.name, d.value);
       });
     });
 

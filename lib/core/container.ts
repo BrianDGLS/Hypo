@@ -3,13 +3,13 @@ import {IInjector, Injector} from "./injector";
 import {IRegistry, Registry} from "./registry";
 
 export interface IContainer<T> {
-  register(dependency: IDependency): T;
+  register(name: string, value: any): T;
 
   unregister(name: string): T;
 
   unregisterAll(): T;
 
-  get(name: string): IDependency;
+  get(name: string): any;
 
   getAll(): IDependency[];
 
@@ -23,8 +23,8 @@ export class Container implements IContainer<Container> {
                      private injector: IInjector = new Injector()) {
   }
 
-  public register(dependency: IDependency): Container {
-    this.registry.add(dependency);
+  public register(name: string, value: any): Container {
+    this.registry.add({name, value});
     return this;
   }
 
@@ -38,17 +38,20 @@ export class Container implements IContainer<Container> {
     return this;
   }
 
-  public get(name: string): IDependency {
-    return this.registry.get(name);
+  public get(name: string): any {
+    return this.registry.get(name).value;
   }
 
-  public getAll(): IDependency[] {
+  public getAll(): any[] {
     return this.registry.getAll();
   }
 
   public inject(dependencyNames: string[]): any {
     return <T extends { new(...args: any[]): {} }>(cls: T) => {
-      this.injector.inject(cls, dependencyNames.map(this.get.bind(this)));
+      this.injector.inject(cls, dependencyNames.map((name) => {
+        const value = this.get(name);
+        return {name, value};
+      }));
     };
   }
 

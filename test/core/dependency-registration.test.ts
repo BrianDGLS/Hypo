@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import "mocha";
-import {IDependency} from "../lib/dependency";
-import {Registry} from "../lib/registry";
+import {IDependency} from "../../lib/core/dependency";
+import {Registry} from "../../lib/core/registry";
 
 const mockDependencies = (): IDependency[] => {
   return [
@@ -13,7 +13,7 @@ const mockDependencies = (): IDependency[] => {
   ];
 };
 
-describe("Hypo.Registry", () => {
+describe("Core.Registry", () => {
   let subject: Registry;
   let dependency: IDependency;
 

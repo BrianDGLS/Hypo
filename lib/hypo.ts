@@ -1,4 +1,5 @@
-export * from "./injector";
-export * from "./registry";
-export * from "./container";
-export * from "./dependency";
+import * as CoreModule from "./core";
+import * as ExpressModule from "./express";
+
+export const Core = CoreModule;
+export const Express = ExpressModule;

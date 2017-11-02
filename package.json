@@ -1,14 +1,15 @@
 {
   "name": "hypo",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Dependency Injection Container for Express",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/**/*.test.js",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "postinstall": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "briandgls <briandgls92@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@types/body-parser": "^1.16.5",
@@ -23,8 +24,6 @@
     "typescript": "^2.5.3"
   },
   "devDependencies": {
-    "nyc": "^11.3.0",
-    "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1"
   }

@@ -1,3 +1,3 @@
 export * from "./container";
 export * from "./controller";
-export * from "./route-method-decorators";
+export * from "./decorators";

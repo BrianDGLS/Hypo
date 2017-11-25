@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { Inject } from "../../../../lib/core";
 import { Controller, Get } from "../../../../lib/express";
 
-import { SERVICE_CONTAINER } from "../containers/service.container";
 import { CarMakeService } from "./car-make.service";
 
 @Inject([CarMakeService])

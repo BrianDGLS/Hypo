@@ -1,11 +1,12 @@
 import * as express from "express";
-import {APP_CONTAINER} from "./containers/app.container";
 
-export const app = express()
-  .use("/", APP_CONTAINER.get("CarMakeController"))
-  .use(APP_CONTAINER.get("404Handler"))
-  .use(APP_CONTAINER.get("ErrorHandler"));
+import { AppModule } from "./app.module";
+import { CarMakeModule } from "./car-make";
 
-app.listen(3000, () => {
-  console.log("running on port 3000");
-});
+const app = express()
+  .use(CarMakeModule.get("CarMakeController"))
+  .use(AppModule.get("404Handler"))
+  .use(AppModule.get("ErrorHandler"))
+  .listen(3000, () => {
+    console.log("running on port 3000");
+  });

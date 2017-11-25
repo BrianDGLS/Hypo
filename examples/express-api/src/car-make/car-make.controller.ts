@@ -1,10 +1,11 @@
-import {NextFunction, Request, Response} from "express";
-import {Controller, Get} from "../../../../lib/express";
+import { NextFunction, Request, Response } from "express";
+import { Inject } from "../../../../lib/core";
+import { Controller, Get } from "../../../../lib/express";
 
-import {SERVICE_CONTAINER} from "../containers/service.container";
-import {CarMakeService} from "./car-make.service";
+import { SERVICE_CONTAINER } from "../containers/service.container";
+import { CarMakeService } from "./car-make.service";
 
-@SERVICE_CONTAINER.inject(["CarMakeService"])
+@Inject([CarMakeService])
 export class CarMakeController extends Controller {
   private CarMakeService: CarMakeService;
 

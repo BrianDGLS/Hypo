@@ -1,6 +1,6 @@
-import {IDependency} from "./dependency";
-import {IInjector, Injector} from "./injector";
-import {IRegistry, Registry} from "./registry";
+import { IDependency } from "./dependency";
+import { IInjector, Injector } from "./injector";
+import { IRegistry, Registry } from "./registry";
 
 export interface IContainer<T> {
   register(name: string, value: any): T;
@@ -19,12 +19,13 @@ export interface IContainer<T> {
 }
 
 export class Container implements IContainer<Container> {
-  public constructor(private registry: IRegistry = new Registry(),
-                     private injector: IInjector = new Injector()) {
-  }
+  public constructor(
+    private registry: IRegistry = new Registry(),
+    private injector: IInjector = new Injector()
+  ) {}
 
   public register(name: string, value: any): Container {
-    this.registry.add({name, value});
+    this.registry.add({ name, value });
     return this;
   }
 
@@ -47,16 +48,19 @@ export class Container implements IContainer<Container> {
   }
 
   public inject(dependencyNames: string[]): any {
-    return <T extends { new(...args: any[]): {} }>(cls: T) => {
-      this.injector.inject(cls, dependencyNames.map((name) => {
-        const value = this.get(name);
-        return {name, value};
-      }));
+    return <T extends { new (...args: any[]): {} }>(cls: T) => {
+      this.injector.inject(
+        cls,
+        dependencyNames.map((name: string) => {
+          const value = this.get(name);
+          return { name, value };
+        })
+      );
     };
   }
 
   public injectAll(): any {
-    return <T extends { new(...args: any[]): {} }>(cls: T) => {
+    return <T extends { new (...args: any[]): {} }>(cls: T) => {
       this.injector.inject(cls, this.getAll());
     };
   }

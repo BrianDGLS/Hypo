@@ -5,8 +5,9 @@
   ],
   "jsRules": {},
   "rules": {
-    "max-classes-per-file": [],
-    "no-console": false
+    "max-classes-per-file": [false],
+    "no-console": false,
+    "trailing-comma": false
   },
   "rulesDirectory": [
     "node_modules/tslint-microsoft-contrib"

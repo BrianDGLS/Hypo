@@ -1,7 +1,7 @@
-import {IDependency} from "./dependency";
+import { IDependency } from "./dependency";
 
 export interface IRegistry {
-  add({name, value}: IDependency): void;
+  add({ name, value }: IDependency): void;
 
   get(name: string): IDependency;
 
@@ -15,7 +15,7 @@ export interface IRegistry {
 export class Registry implements IRegistry {
   private registry = new Map<string, any>();
 
-  public add({name, value}: IDependency): void {
+  public add({ name, value }: IDependency): void {
     if (this.registry.get(name)) {
       throw new Error(`[Registry#add]: [name:${name}] exists in registry.`);
     }
@@ -26,10 +26,12 @@ export class Registry implements IRegistry {
   public get(name: string): IDependency {
     const value = this.registry.get(name);
     if (value) {
-      return {name, value};
+      return { name, value };
     }
 
-    throw new Error(`[Registry#get]: [name:${name}] does not exist in registry.`);
+    throw new Error(
+      `[Registry#get]: [name:${name}] does not exist in registry.`
+    );
   }
 
   public getAll(): IDependency[] {
@@ -38,7 +40,9 @@ export class Registry implements IRegistry {
 
   public remove(name: string): void {
     if (this.registry.get(name) === undefined) {
-      throw new Error(`[Registry#remove]: [name:${name}] does not exist in registry.`);
+      throw new Error(
+        `[Registry#remove]: [name:${name}] does not exist in registry.`
+      );
     }
 
     this.registry.delete(name);

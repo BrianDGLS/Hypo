@@ -1,7 +1,9 @@
-import {readFileSync} from "fs";
-import {join} from "path";
+import { readFileSync } from "fs";
+import { join } from "path";
 
-const DB = JSON.parse(readFileSync(join(__dirname, "../..", "db.json"), "utf8"));
+const DB = JSON.parse(
+  readFileSync(join(__dirname, "../..", "db.json"), "utf8")
+);
 
 export class CarMakeService {
   public allMakes() {
@@ -9,6 +11,6 @@ export class CarMakeService {
   }
 
   public getMakeById(id: string) {
-    return DB.Makes.find(({make_id}: any) => make_id === id);
+    return DB.Makes.find(({ make_id }: any) => make_id === id);
   }
 }

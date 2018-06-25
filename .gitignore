@@ -1,7 +1,12 @@
 .idea
-.nyc_output
-node_modules
+.vscode
+
 *.logs
+node_modules
+
+coverage
+.nyc_output
+
+**/*.js.map
 lib/**/*.js
 test/**/*.js
-examples/**/*.js

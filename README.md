@@ -1,6 +1,6 @@
 # Hypo
 
-A dependency injection container. Supports NodeJS and in browser development.
+A dependency injection container. Supports NodeJS and browser development.
 
 ## Usage
 

@@ -1,63 +1,116 @@
-class FactoryCallback {
-  __factory = true
+class ContainerService {
+  private serviceInstance: any
 
-  constructor(public callback: (container: Container) => any) {}
+  constructor(
+    protected container: Container,
+    protected serviceCreationCallback: (container: Container) => any) {
+  }
+
+  get(): any {
+    if (this.serviceInstance) {
+      return this.serviceInstance
+    }
+
+    this.serviceInstance = this.serviceCreationCallback(this.container)
+    return this.serviceInstance
+  }
+
+  raw(): (container: Container) => any {
+    return this.serviceCreationCallback
+  }
+}
+
+class FactoryContainerService extends ContainerService {
+  get(): any {
+    return this.serviceCreationCallback(this.container)
+  }
+}
+
+class ProtectedParameter {
+  private initialised = false
+  protected value: any
+
+  constructor(
+    protected container: Container,
+    protected parameterCreationCallback: (container: Container) => any) {
+  }
+
+  get(): any {
+    if (!this.initialised) {
+      this.value = this.parameterCreationCallback(this.container)
+      this.initialised = true
+    }
+
+    return this.value
+  }
 }
 
 export class Container {
-  private rawRegistry = new Map<string, any>()
+  [key: string]: any
+
   public registry = new Map<string, any>()
 
-  register(service: string | any, callback?: any): Container {
-    if (callback && callback instanceof FactoryCallback) {
-      this.rawRegistry.set(service, callback)
-      this.registry.set(service, callback)
-    } else {
-      switch (typeof service) {
-        case 'string':
-          this.rawRegistry.set(service, callback)
-          this.registry.set(service, callback(this))
-          break
-        case 'function':
-          this.rawRegistry.set(service.name, service)
-          this.registry.set(service.name, service(this))
-          break
-        default:
-          throw new Error('Dependency must be of type string or function')
+  register(
+    service: string | Container,
+    serviceCreationCallback?: ((container: Container) => any)
+      | FactoryContainerService
+      | ProtectedParameter
+  ): Container {
+    if (typeof service === 'string' && serviceCreationCallback) {
+      if (serviceCreationCallback instanceof FactoryContainerService) {
+        this.registry.set(service, serviceCreationCallback)
+      } else if (serviceCreationCallback instanceof ProtectedParameter) {
+        Object.assign(this, {
+          get [(service as string)]() {
+            return (serviceCreationCallback as any).get()
+          }
+        })
+      } else {
+        this.registry.set(service, new ContainerService(this, serviceCreationCallback))
       }
+    } else if(service instanceof Container) {
+      service.registry.forEach((value, key) => {
+        this.register(key, value.raw())
+      })
     }
+
     return this
   }
 
-  factory(callback: (container: Container) => any): FactoryCallback {
-    return new FactoryCallback(callback)
+  factory(serviceCreationCallback: (container: Container) => any): FactoryContainerService {
+    return new FactoryContainerService(this, serviceCreationCallback)
   }
 
-  get(dependency: string): any {
-    if (this.registry.has(dependency)) {
-      const dependencyMethod = this.registry.get(dependency)
+  protect(parameterCreationCallback: (container: Container) => any): ProtectedParameter {
+    return new ProtectedParameter(this, parameterCreationCallback)
+  }
 
-      if (dependencyMethod && dependencyMethod instanceof FactoryCallback) {
-        return dependencyMethod.callback(this)
-      }
-
-      return dependencyMethod
+  get(service: string): any {
+    if (this.registry.has(service)) {
+      return this.registry.get(service).get()
     }
   }
 
-  delete(dependency: string): void {
-    if (this.registry.has(dependency)) {
-      this.registry.delete(dependency)
+  extend(service: string, extensionCallback: (storage: any, container: Container) => any): any {
+    if (this.registry.has(service)) {
+      const serviceMethod = this.get(service)
+      extensionCallback(serviceMethod, this)
+    }
+  }
+
+  raw(service: string): any {
+    if (this.registry.has(service)) {
+      return this.registry.get(service).raw()
+    }
+  }
+
+  delete(service: string): void {
+    if (this.registry.has(service)) {
+      this.registry.delete(service)
     }
   }
 
   deleteAll(): void {
     this.registry.clear()
-  }
-
-  raw(service: string): any {
-    if (this.rawRegistry.has(service)) {
-      return this.rawRegistry.get(service)
-    }
   }
 }

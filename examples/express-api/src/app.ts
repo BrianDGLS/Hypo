@@ -2,59 +2,78 @@ import * as express from 'express'
 
 import { Container } from '../../../lib/hypo'
 
-let instances = 0
 
-class ExampleClass {
-  instance = instances++
+class Person {
+  constructor(public name: string, public age: number) {
+  }
+}
+
+class Cat {
+  constructor(public name: string, public age: number, public owner: Person) {
+  }
 }
 
 const container = new Container()
 
-container.register('ExampleClass', (container: Container) => new ExampleClass())
-container.register(
-  'ExampleFactory',
-  container.factory((container: Container) => {
-    return new ExampleClass()
-  })
-)
+container.register('owner', c => {
+  return new Person('Brian', 26)
+})
 
+container.register('cat', c => {
+  return new Cat('Garfield', 4, c.get('owner'))
+})
+
+container.extend('cat', (storage, c) => {
+  storage.details = () => `${storage.name} - ${storage.age}`
+})
+
+console.log(container.get('cat').details())
 
 let count = 0
-const interval = setInterval(() => {
-  console.log(`Example Class -> ${container.get('ExampleClass').instance}`)
-  console.log(`Example Factory -> ${container.get('ExampleFactory').instance}`)
-  count++
-  if (count === 10) clearInterval(interval)
+
+class Counter {
+  count = count++
+}
+
+container.register('static', c => {
+  return new Counter()
+})
+
+container.register('factory', container.factory(container.raw('static')))
+
+
+setInterval(() => {
+  console.log('static -> ' + container.get('static').count)
+  console.log('factory -> ' + container.get('factory').count)
 }, 1000)
 
-container.register(
-  '404Handler',
-  (container: Container) => (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    next({ status: 404, message: 'page not found' })
-  }
-)
+container['prop'] = 42
 
-container.register(
-  'ErrorHandler',
-  (container: Container) => (
-    err: any,
-    req: express.Request,
-    res: express.Response
-  ) => {
-    res.locals.error = err
-    res.locals.message = err.message
-    res.status(err.status || 500)
-    res.send(err)
-  }
-)
+container.register('protected_prop', container.protect(c => {
+  return c.prop * 2
+}))
 
-const app = express()
+console.log(container.prop)
+console.log(container.protected_prop)
 
-app.use(container.get('404Handler'))
-app.use(container.get('ErrorHandler'))
+class MagicNumber {
+  value = 3
+}
 
-console.log(container.raw('ErrorHandler').toString())
+const app = new Container()
+
+app['name'] = 'My Awesome App'
+
+const serviceContainer = new Container()
+
+serviceContainer.register('magicNumberService', c => {
+  return new MagicNumber()
+})
+
+app.register(serviceContainer)
+
+// returns magicNumberService registered in the serviceContainer
+app.get('magicNumberService')
+
+console.log(app.get('magicNumberService').value)
+

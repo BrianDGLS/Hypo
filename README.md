@@ -70,11 +70,11 @@ const uniqueRobot = container.get('uniqueRobot')
 
 ## Defining parameters
 
-Defining a parameter allows to ease the configuration of your container from the outside and to store global values.
+Defining a parameter allows for easy configuration of your container from the outside and to store global values.
 
 ```typescript
 container.myName = 'Brian'
-container.myAge = '26'
+container.myAge = 26
 
 container.register('me', c => {
   return new Person(c.myName, c.myAge)
@@ -128,7 +128,6 @@ serviceContainer.register('magicNumberService', c => {
 
 app.register(serviceContainer)
 
-// returns magicNumberService registered in the serviceContainer
 app.get('magicNumberService')
 ```
 
@@ -149,9 +148,9 @@ Example projects:
 
 - [Express Api](./examples/express-api)
 
-### Thanks
+## Thanks
 
 Special thanks to the creators and maintainers of [Pimple](https://pimple.symfony.com/). 
-Hypo attempts to follow the Pimple api for easy use and familiarity. 
+Hypo attempts to follow the Pimple api for ease of use and familiarity. 
 The Hypo docs also attempt to match that of the Pimple docs.
 

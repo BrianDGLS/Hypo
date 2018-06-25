@@ -142,12 +142,6 @@ container.register('robot', c => new Robot())
 container.register('uniqueRobot', container.factory(c => c.raw('robot')))
 ```
 
-## Examples
-
-Example projects:
-
-- [Express Api](./examples/express-api)
-
 ## Thanks
 
 Special thanks to the creators and maintainers of [Pimple](https://pimple.symfony.com/). 

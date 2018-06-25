@@ -1,6 +1,6 @@
 # Hypo
 
-A dependency injection container. Influenced by the [pimple](https://pimple.symfony.com/) dependency injection container.
+A dependency injection container. Supports NodeJS and in browser development.
 
 ## Usage
 
@@ -12,7 +12,7 @@ import { Container } from 'hypo'
 const container = new Container()
 ```
 
-A Hypo container has two types of dependencies. These are known as `services` and `parameters`.
+A container has two types of dependencies. These are known as **services** and **parameters**.
 
 ## Defining a service
 
@@ -32,7 +32,7 @@ container.register('cat', c => {
 })
 ```
 
-Alternatively calls to the `register` method can be chained, as demonstrated below.
+Alternatively calls to the `register()` method can be chained, as demonstrated below.
 
 ```typescript
 container
@@ -43,15 +43,14 @@ container
 Note that the callback has access to the current container's instance, via it's first argument.
 This allows you to reference other contained services and parameters when defining a new service.
 
-Objects are created only when they are first accessed via the `get` method, so order is not important.
-
+Objects are created only when they are first accessed via the `get()` method, so order is not important.
 Using a defined service is very easy as demonstrated below.
 
 ```typescript
-const car = container.get('cat')
+const cat = container.get('cat')
 ```
 
-The above is roughly equivalent to the following without a using a service.
+The above is roughly equivalent to the following.
 
 ```typescript
 const cat = new Cat('Garfield', 4, new Person('Brian', 26))
@@ -59,7 +58,7 @@ const cat = new Cat('Garfield', 4, new Person('Brian', 26))
 
 ## Defining a factory service
 
-By default the same instance of a `service` is returned when calling the container's `get` method. If you want to return a new instance of the `service` you can make use of the container's `factory` method as demonstrated below.
+By default the same instance of a service is returned when calling the container's `get()` method. If you want to return a new instance of the service you can make use of the container's `factory()` method as demonstrated below.
 
 ```typescript
 container.register('uniqueRobot', container.factory(c => {
@@ -84,7 +83,7 @@ container.register('me', c => {
 
 ## Protecting parameters
 
-To use an anonymous function to define a parameter use the `protect` container method.
+To use an anonymous function to define a parameter use the `protect()` container method.
 
 ```typescript
 container['prop'] = 42
@@ -135,7 +134,7 @@ app.get('magicNumberService')
 
 ## Get the service creation function
 
-When accessing a service, the container automatically calls the function used to supply the service. This creates an instance of that service. If you want to get access to this function, use the `raw` method.
+When accessing a service, the container automatically calls the function used to supply the service. This creates an instance of that service. If you want to get access to this function, use the `raw()` method.
 
 ```typescript
 container.register('robot', c => new Robot())
@@ -149,3 +148,10 @@ container.register('uniqueRobot', container.factory(c => c.raw('robot')))
 Example projects:
 
 - [Express Api](./examples/express-api)
+
+### Thanks
+
+Special thanks to the creators and maintainers of [Pimple](https://pimple.symfony.com/). 
+Hypo attempts to follow the Pimple api for easy use and familiarity. 
+The Hypo docs also attempt to match that of the Pimple docs.
+

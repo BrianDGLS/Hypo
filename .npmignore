@@ -1,5 +1,13 @@
+.idea
+.vscode
+
 .nyc_output
 coverage
 
 .prettierrc
 .editorconfig
+
+./lib/index.ts
+./lib/hypo.ts
+
+test

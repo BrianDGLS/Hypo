@@ -1,24 +1,36 @@
 {
   "name": "hypo",
-  "version": "1.0.0",
   "description": "A dependency injection container",
+  "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha ./test/**/*.test.js",
     "dev": "tsc --watch",
     "postinstall": "tsc"
   },
-  "keywords": [],
-  "author": "briandgls <briandgls92@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "typescript": "^2.5.3"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrianDGLS/Hypo.git"
   },
-  "devDependencies": {
+  "keywords": [
+    "container",
+    "dependency",
+    "injection"
+  ],
+  "author": "briandgls <briandgls92@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BrianDGLS/Hypo/issues"
+  },
+  "homepage": "https://github.com/BrianDGLS/Hypo",
+  "dependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
     "nyc": "^12.0.2",
     "prettier": "^1.13.5",
     "ts-node": "^7.0.0",

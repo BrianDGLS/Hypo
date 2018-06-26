@@ -4,7 +4,8 @@ class ContainerService {
   constructor(
     protected container: Container,
     protected serviceCreationCallback: (container: Container) => any
-  ) {}
+  ) {
+  }
 
   get(): any {
     if (this.serviceInstance) {
@@ -26,18 +27,13 @@ class FactoryContainerService extends ContainerService {
   }
 }
 
-class ProtectedParameter {
+class ProtectedParameter extends ContainerService {
+  private value: any
   private initialised = false
-  protected value: any
-
-  constructor(
-    protected container: Container,
-    protected parameterCreationCallback: (container: Container) => any
-  ) {}
 
   get(): any {
     if (!this.initialised) {
-      this.value = this.parameterCreationCallback(this.container)
+      this.value = this.serviceCreationCallback(this.container)
       this.initialised = true
     }
 

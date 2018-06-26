@@ -1,4 +1,4 @@
-class ContainerService {
+export class ContainerService {
   private serviceInstance: any
 
   constructor(
@@ -21,13 +21,13 @@ class ContainerService {
   }
 }
 
-class FactoryContainerService extends ContainerService {
+export class FactoryContainerService extends ContainerService {
   get(): any {
     return this.serviceCreationCallback(this.container)
   }
 }
 
-class ProtectedParameter extends ContainerService {
+export class ProtectedParameter extends ContainerService {
   private value: any
   private initialised = false
 

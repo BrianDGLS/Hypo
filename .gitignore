@@ -9,5 +9,8 @@ coverage
 
 lib/**/*.js
 lib/**/*.js.map
+lib/**/*.d.ts
+
 test/**/*.js
 test/**/*.js.map
+test/**/*.d.ts

@@ -1,13 +1,25 @@
-# Hypo
+# hypo-container
 
 A dependency injection container. Supports NodeJS and browser development.
+
+## Install
+
+NPM:
+```
+npm install --save hypo-container
+```
+
+Yarn:
+```
+yarn add hypo-container
+```
 
 ## Usage
 
 To create a container create a new instance of the `Container` class.
 
 ```typescript
-import { Container } from 'hypo'
+import { Container } from 'hypo-container'
 
 const container = new Container()
 ```

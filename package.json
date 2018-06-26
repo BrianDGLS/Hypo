@@ -1,12 +1,12 @@
 {
-  "name": "hypo",
+  "name": "hypo-container",
   "description": "A dependency injection container",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha ./test/**/*.test.js",
     "dev": "tsc --watch",
-    "prepublish": "tsc"
+    "prepare": "tsc",
+    "test": "nyc --reporter=html --reporter=text mocha ./test/**/*.test.js"
   },
   "repository": {
     "type": "git",

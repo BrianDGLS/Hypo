@@ -4,8 +4,7 @@ export class ContainerService {
   constructor(
     protected container: Container,
     protected serviceCreationCallback: (container: Container) => any
-  ) {
-  }
+  ) {}
 
   get(): any {
     if (this.serviceInstance) {
@@ -29,14 +28,16 @@ export class FactoryContainerService extends ContainerService {
 
 export class ProtectedParameter extends ContainerService {
   private value: any
-  private initialised = false
+
+  constructor(
+    protected container: Container,
+    protected serviceCreationCallback: (container: Container) => any
+  ) {
+    super(container, serviceCreationCallback)
+    this.value = this.serviceCreationCallback(this.container)
+  }
 
   get(): any {
-    if (!this.initialised) {
-      this.value = this.serviceCreationCallback(this.container)
-      this.initialised = true
-    }
-
     return this.value
   }
 }
@@ -53,7 +54,7 @@ export class Container {
       | FactoryContainerService
       | ProtectedParameter
   ): Container {
-    if (typeof service === 'string') {
+    if (service && typeof service === 'string') {
       this.throwIfServiceAlreadyRegistered(service)
       this.throwIfServiceCreationCallbackNotSupplied(serviceCreationCallback)
 
@@ -77,6 +78,8 @@ export class Container {
       service.registry.forEach((value, key) => {
         this.register(key, value.raw())
       })
+    } else {
+      this.throwIfInvalidServiceType()
     }
 
     return this
@@ -152,5 +155,9 @@ export class Container {
     if (!this.registry.has(service)) {
       throw new Error(`${service} not in registry`)
     }
+  }
+
+  private throwIfInvalidServiceType(): void {
+    throw new Error(`service must be of type string or Container`)
   }
 }

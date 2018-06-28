@@ -154,6 +154,32 @@ container.register('robot', c => new Robot())
 container.register('uniqueRobot', container.factory(c => c.raw('robot')))
 ```
 
+## Deleting a registered service
+
+You may want to delete a service at some point. To do this you may use the `delete()` method. Supply the name of a registered service as the first argument in order to delete the service.
+
+```typescript
+container.delete('cat')
+```
+
+## Deleting all services
+
+To delete all services simple call the `deleteAll()` method.
+
+```typescript
+container.deleteAll()
+```
+
+## Deleting a parameter
+
+As parameters are set directly on the container object they can be deleted using the built in `delete` keyword.
+
+```typescript
+container.myNumber = 0987654321
+
+delete container.myNumber
+```
+
 ## Thanks
 
 Special thanks to the creators and maintainers of [Pimple](https://pimple.symfony.com/). 

@@ -71,11 +71,23 @@ describe('Container', () => {
       expect(testSubject.get('firstGreeter').name).to.eq('1')
       expect(testSubject.get('secondGreeter').name).to.eq('2')
     })
+
+    it('should throw if invalid service type given', () => {
+      expect(() => testSubject.register(3 as any, c => {})).to.throw()
+      expect(() => testSubject.register({} as any, c => {})).to.throw()
+      expect(() => testSubject.register([] as any, c => {})).to.throw()
+      expect(() => testSubject.register('' as any, c => {})).to.throw()
+    })
   })
 
   describe('#get()', () => {
     it('should throw error if service is not registered', () => {
       expect(() => testSubject.get('unknown')).to.throw()
+    })
+
+    it('should throw when trying to access param', () => {
+      testSubject.param = 3
+      expect(() => testSubject.get('param')).to.throw()
     })
   })
 
@@ -91,8 +103,27 @@ describe('Container', () => {
 
     it('should throw if parameter already defined', () => {
       registerParameter()
-      expect(registerParameter).to.throw()
+      expect(() => registerParameter()).to.throw()
     })
+
+    it('should allow deletion', () => {
+      registerParameter()
+      delete testSubject.myNumber
+      expect(testSubject.myNumber).to.be.undefined;
+    })
+
+    it('should register parameter from function result', () => {
+      testSubject.register(
+        'testParam',
+        testSubject.protect(c => {
+          const three = () => 3
+          return three()
+        })
+      )
+
+      expect(testSubject.testParam).to.eq(3)
+    })
+
   })
 
   describe('#factory()', () => {

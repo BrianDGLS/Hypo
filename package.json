@@ -6,7 +6,7 @@
   "typings": "./dist/lib/hypo.d.ts",
   "scripts": {
     "dev": "tsc --watch",
-    "prepare": "tsc",
+    "prepare": "tsc && npm run test",
     "test": "nyc --reporter=html --reporter=text mocha ./dist/**/*.test.js"
   },
   "repository": {

@@ -156,7 +156,7 @@ container.register('uniqueRobot', container.factory(c => c.raw('robot')))
 
 ## Deleting a registered service
 
-You may want to delete a service at some point. To do this you may use the `delete()` method. Supply the name of a registered service as the first argument in order to delete the service.
+You may want to delete a service at some point. To do this you use the `delete()` method. Supply the name of a registered service as the first argument in order to delete the service.
 
 ```typescript
 container.delete('cat')
@@ -164,7 +164,7 @@ container.delete('cat')
 
 ## Deleting all services
 
-To delete all services simple call the `deleteAll()` method.
+To delete all services call the `deleteAll()` method.
 
 ```typescript
 container.deleteAll()

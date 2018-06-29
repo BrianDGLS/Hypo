@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { Container } from '../lib'
+import { Container } from '../lib/hypo'
 
 class Greeter {
   constructor(public name: string) {}

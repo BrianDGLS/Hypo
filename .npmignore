@@ -1,13 +1,12 @@
 .idea
 .vscode
 
-.nyc_output
+*.logs
+node_modules
+
 coverage
+.nyc_output
 
-.prettierrc
-.editorconfig
-
-./lib/index.ts
-./lib/hypo.ts
-
+lib
 test
+dist/test

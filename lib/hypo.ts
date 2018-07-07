@@ -1,3 +1,13 @@
+export declare class Map {
+  clear(): void
+  delete(key: any): boolean
+  forEach(callbackfn: (value: any, key: any, target: any) => void): void
+  get(key: any): any
+  has(key: any): boolean
+  set(key: any, val: any): this
+  size: number
+}
+
 export class ContainerService {
   private serviceInstance: any
 
@@ -45,7 +55,7 @@ export class ProtectedParameter extends ContainerService {
 export class Container {
   [key: string]: any
 
-  public registry = new Map<string, any>()
+  public registry = new Map()
 
   register(
     service: string | Container,
@@ -62,8 +72,7 @@ export class Container {
         this.registry.set(service, serviceCreationCallback)
       } else if (serviceCreationCallback instanceof ProtectedParameter) {
         this.throwIfParameterAlreadyRegistered(service)
-
-        Object.assign(this, {
+        ;(Object as any).assign(this, {
           get [service as string]() {
             return (serviceCreationCallback as any).get()
           }
@@ -75,7 +84,7 @@ export class Container {
         )
       }
     } else if (service instanceof Container) {
-      service.registry.forEach((value, key) => {
+      service.registry.forEach((value: any, key: any) => {
         this.register(key, value.raw())
       })
     } else {

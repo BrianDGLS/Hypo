@@ -1,7 +1,7 @@
 {
   "name": "hypo-container",
   "description": "A dependency injection container",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "./lib/hypo.js",
   "typings": "./lib/hypo.d.ts",
   "scripts": {
@@ -26,7 +26,6 @@
   "homepage": "https://github.com/BrianDGLS/Hypo",
   "devDependencies": {
     "@types/chai": "^4.0.4",
-    "@types/es6-shim": "^0.31.37",
     "@types/mocha": "^2.2.43",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",

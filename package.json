@@ -1,7 +1,7 @@
 {
   "name": "hypo-container",
   "description": "A dependency injection container",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "./lib/hypo.js",
   "typings": "./lib/hypo.d.ts",
   "scripts": {
